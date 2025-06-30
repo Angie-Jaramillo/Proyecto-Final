@@ -41,6 +41,7 @@
         "cyw43_arch.h": "c",
         "cyw43.h": "c",
         "netif.h": "c",
-        "opt.h": "c"
+        "opt.h": "c",
+        "leds.h": "c"
     }
 }

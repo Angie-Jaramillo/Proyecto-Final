@@ -4,6 +4,7 @@
 #include "pico/sync.h"
 
 #include "wifi_hal.h"
+#include "lib.h"
 
 #define WIFI_SSID "ANGIE"
 #define WIFI_PASSWORD "1001804091"
@@ -16,9 +17,11 @@
 
 
 int main() {
+
     stdio_init_all();
 
     sleep_ms(1000); // Allow time for the system to stabilize
+
 
     wifi_init();
     if (wifi_connect(WIFI_SSID, WIFI_PASSWORD) != 0) {
@@ -26,6 +29,7 @@ int main() {
         return -1; // Exit if connection fails
     }
     printf("Connected to WiFi SSID: %s\n", WIFI_SSID);
+
     wifi_get_ip(); // Print the IP address after connection
 
     // Set a static IP address (optional)
@@ -34,10 +38,18 @@ int main() {
         return -1; // Exit if setting static IP fails
     }
    
+    
+
+    printf("¡Comenzando Test de Léger!\n");
+
+    
+
+    start_test(); // Start the Léger test
 
     while (true) {
-        // Blink LED to indicate connection
         __wfi();
+
+        // Aqui deberias comparar las banderas para saber que boton se presionó
 
     }
 

@@ -38,6 +38,8 @@ include_directories(include)
 # Add executable. Default name is the project name, version 0.1
 add_executable(wifi_example 
             src/wifi_example.c
+            src/lib.c
+            src/leds.c
             src/wifi_hal.c)
 
 pico_set_program_name(wifi_example "wifi_example")

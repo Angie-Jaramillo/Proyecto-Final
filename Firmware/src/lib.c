@@ -5,6 +5,12 @@
  * 
  * 
  */
+
+#include "lib.h"
+
+test_state_t test_state = {1, 8.5, 8470};  // Estado inicial del test
+
+
 void update_interval_for_level(int level) {
 
     test_state.speed_kmh = 8.5 + 0.5 * (level - 1);
@@ -20,7 +26,9 @@ void update_interval_for_level(int level) {
 // Temporizador para el pitido
 int64_t alarm_callback(alarm_id_t id, void *user_data) {
     printf("¡Pitido! (Nivel %d)\n", test_state.level);
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, !cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN)); // Toggle LED
+
+    toggle_leds(); // Alterna los LEDs entre rojo y verde
+    
     return test_state.interval_ms * 1000; // Convierte ms a µs para el próximo pitido
 }
 
@@ -28,20 +36,12 @@ int64_t alarm_callback(alarm_id_t id, void *user_data) {
 int64_t level_up_callback(alarm_id_t id, void *user_data) {
     test_state.level++;
     update_interval_for_level(test_state.level);
+     
     return 60 * 1000 * 1000; // 60 segundos en µs (para repetir cada minuto)
 }
 
+void start_test(){
 
-// EN EL MAIN
-
- if (cyw43_arch_init()) {
-        printf("Error al iniciar WiFi\n");
-        return -1;
-    }
-    
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0); // LED inicialmente apagado
-    
-    // Configura el primer nivel
     update_interval_for_level(test_state.level);
     
     // Inicia el temporizador de pitidos
@@ -49,6 +49,36 @@ int64_t level_up_callback(alarm_id_t id, void *user_data) {
     
     // Inicia el temporizador de cambio de nivel (cada 60 segundos)
     add_alarm_in_ms(60000, level_up_callback, NULL, true);
-    
-    printf("¡Comenzando Test de Léger!\n");
+
+    init_leds(); // Inicializa los LEDs
     printf("¡Pitido! (Nivel %d)\n", test_state.level);
+
+}
+
+void calculate_results() {
+    // Aquí puedes implementar la lógica para calcular los resultados del test de Léger
+    // Por ejemplo, podrías calcular el tiempo total, la distancia recorrida, etc.
+
+    turn_off_leds(); // Apaga los LEDs al finalizar el test
+    
+    printf("Resultados del test: Nivel %d, Velocidad %.1f km/h\n", 
+           test_state.level, test_state.speed_kmh);
+    
+}
+
+void reset_test() {
+    // Resetea el estado del test a su configuración inicial
+    test_state.level = 1;
+    test_state.speed_kmh = 8.5;
+    test_state.interval_ms = 8470; // Intervalo inicial en milisegundos
+
+    printf("Test reseteado a nivel %d, velocidad %.1f km/h, intervalo %llu ms\n", 
+           test_state.level, test_state.speed_kmh, test_state.interval_ms);
+    
+    start_test(); // Reinicia el test después de resetear
+}
+
+
+
+
+// EN EL MAIN
