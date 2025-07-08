@@ -26,9 +26,6 @@
 #define WIFI_SSID "ANGIE"               // Wifi SSID 
 #define WIFI_PASSWORD "1001804091"      // Wifi Password
 
-
-
-
 /**
  * @brief Initializes the WiFi hardware and prepares it for use.
  * 
