@@ -1,9 +1,9 @@
 /**
  * @file wifi_hal.h
- * 
+ *
  * This header file contains the declaration of the `wifi_hal` function.
  * It is designed to provide a simple interface for WiFi operations
- * 
+ *
  * @author Angie Jaramillo
  * @date 21-06-2025
  */
@@ -11,95 +11,84 @@
 #include "wifi_hal.h"
 
 
-static char ip_str[16] = {0};
-
-
-
-int wifi_init(void) {
-    if (cyw43_arch_init()) {
-        return -1;                  // Error initializing WiFi hardware
+void static inline setup_udp_listener(udp_recv_fn udp_receive_callback) {
+    struct udp_pcb *pcb = udp_new();
+    if (!pcb) {
+        printf("Error al crear socket UDP\n");
+        return;
     }
-    printf("WiFi hardware initialized successfully.\n");
-    return 0;                       // Success
+    udp_bind(pcb, IP_ADDR_ANY, UDP_PORT);
+    udp_recv(pcb, udp_receive_callback, NULL);
+    printf("UDP listener activo en el puerto %d\n", UDP_PORT);
+}
+
+void static inline set_static_ip(int is_ap)
+{
+    ip4_addr_t ipaddr, netmask, gw;
+
+    if (is_ap)
+    {
+        IP4_ADDR(&ipaddr, 192, 168, 4, 1);
+        IP4_ADDR(&gw, 192, 168, 4, 1);
+    }
+    else
+    {
+        IP4_ADDR(&ipaddr, 192, 168, 4, 2);
+        IP4_ADDR(&gw, 192, 168, 4, 1);
+    }
+
+    IP4_ADDR(&netmask, 255, 255, 255, 0);
+    netif_set_addr(netif_default, &ipaddr, &netmask, &gw);
+    printf("IP estática configurada: %s\n", ip4addr_ntoa(&ipaddr));
 }
 
 
-int wifi_connect(const char *ssid, const char *password, udp_recv_fn udp_callback) {
-   
-    if (ssid == NULL || password == NULL) {
-        printf("SSID or password is NULL.\n");
-        return -1;                  // Return error code for null parameters
+int wifi_connect(udp_recv_fn udp_callback)
+{
+    if (cyw43_arch_init())
+    {
+        return -1;
     }
 
-    cyw43_arch_enable_sta_mode();  // Enable station mode (client mode)
+    printf("WiFi hardware initialized successfully.\n");
 
-    printf("Connecting to WiFi SSID: %s\n", ssid);
-    int ret = cyw43_arch_wifi_connect_timeout_ms(ssid, password, CYW43_AUTH_WPA2_AES_PSK, 10000); // 10s timeout
-    if (ret != 0) {
-        printf("Failed to connect to WiFi: %d\n", ret);
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+#if IS_AP
+    // Este codigo solo se compila y se ejecuta si IS_AP es 1
+    printf("Configurando Wi-Fi en modo AP...\n");
+    cyw43_arch_enable_ap_mode(SSID, PASSWORD, CYW43_AUTH_WPA2_AES_PSK);
+    set_static_ip(1); // Establecer IP fija del AP
 
-        return ret;                // Return error code
+    printf("Modo AP activado con SSID: %s\n", SSID);
+    printf("IP del AP: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
+#else
+    // Este codigo solo se compila y se ejecuta si IS_AP es 0
+    printf("Configurando Wi-Fi en modo STA...\n");
+    cyw43_arch_enable_sta_mode();
+    if (cyw43_arch_wifi_connect_timeout_ms(SSID, PASSWORD,
+                                           CYW43_AUTH_WPA2_AES_PSK, 30000))
+    {
+        printf("No se pudo conectar a %s\n", SSID);
+        return -1;
     }
+    printf("Conectado al AP con IP: %s\n",
+           ip4addr_ntoa(netif_ip4_addr(netif_default)));
 
-    printf("Connected to WiFi SSID: %s\n", ssid);
-
-    printf("Configurando servidor UDP...\n");
-
-    struct udp_pcb *pcb = udp_new_ip_type(IPADDR_TYPE_ANY);
-    if (!pcb) {
-        printf("Error creating UDP PCB\n");
-        return -1;                 // Return error code for PCB creation failure
-    }
-
-    if (udp_bind(pcb, IP_ANY_TYPE, UDP_PORT) != ERR_OK) {
-        printf("Error binding UDP PCB\n");
-        return -1;                 // Return error code for bind failure
-    }
-
-    udp_recv(pcb, udp_callback, NULL); // Set the receive callback
-    printf("UDP server ready on port %d\n", UDP_PORT);
+    printf("Modo STA activado con SSID: %s\n", SSID);
+    set_static_ip(0); // Establecer IP fija del cliente
+    printf("IP del cliente: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
+#endif
 
     // Set the default network interface
     cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
-} 
-
-
-void wifi_get_ip(void) {
-    printf("IP Address: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
+    setup_udp_listener(udp_callback);
 
 }
 
-int set_wifi_static_ip(const char *ip, const char *netmask, const char *gateway) {
-    // Verificar que la interfaz de red esté disponible
-    if (netif_default == NULL) {
-        printf("Error: No hay interfaz de red disponible\n");
-        return -2;
-    }
-
-    sleep_ms(100); // Esperar breve momento para estabilizar conexión
-    
-    ip4_addr_t ip_addr, mask_addr, gw_addr;
-
-    // Convertir strings a estructuras ip4_addr_t
-    if (!ip4addr_aton(ip, &ip_addr) || 
-        !ip4addr_aton(netmask, &mask_addr) || 
-        !ip4addr_aton(gateway, &gw_addr)) {
-        printf("Error: Formato de dirección IP inválido\n");
-        printf("Debe usar formato como: 192.168.1.100\n");
-        return -1;
-    }
-
-    // Configurar la dirección IP estática
-/*     netif_set_addr(netif_default, &ip_addr, &mask_addr, &gw_addr);
-    sleep_ms(100); // Esperar a que se apliquen los cambios */
-
-    // Verificar y mostrar la configuración aplicada
-/*     printf("\nConfiguración IP estática aplicada:\n");
+void wifi_get_ip(void)
+{
     printf("IP Address: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
-    printf("Netmask: %s\n", ip4addr_ntoa(netif_ip4_netmask(netif_default)));
-    printf("Gateway: %s\n", ip4addr_ntoa(netif_ip4_gw(netif_default))); */
-    
-    return 0; // Éxito
 }
+
+
+

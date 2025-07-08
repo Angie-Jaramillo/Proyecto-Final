@@ -13,52 +13,33 @@
 #ifndef WIFI_HAL_H
 #define WIFI_HAL_H
 
-
+#include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
 #include "lwip/pbuf.h"
 #include "lwip/udp.h"
+#include "lwip/netif.h"
+#include "lwip/ip_addr.h"
 #include <string.h>
 #include <stdio.h>
-#include "lwip/netif.h"
 
+#define IS_AP 1         // <--- Cambia a 0 para que esta Pico sea cliente STA
 
-#define UDP_PORT 1234                   // UDP Port for communication
-#define WIFI_SSID "ANGIE"               // Wifi SSID 
-#define WIFI_PASSWORD "1001804091"      // Wifi Password
+#define SSID "Raspberry Pi Pico W"
+#define PASSWORD "12345678"
+#define UDP_PORT 1234
 
-/**
- * @brief Initializes the WiFi hardware and prepares it for use.
- * 
- * @return int Returns 0 on success, or a negative error code on failure.
- * 
- */
-int wifi_init(void);
 
 /**
  * @brief Connects to a WiFi network with the specified SSID and password.
  * 
- * @param ssid The SSID of the WiFi network to connect to.
- * @param password The password for the WiFi network.
+
  * @param callback A callback function to be called with the connection state.
  * 
  * @return int Returns 0 on success, or a negative error code on failure.
  * 
  */
-int wifi_connect(const char *ssid, const char *password, udp_recv_fn udp_callback); 
+int wifi_connect(udp_recv_fn udp_callback); 
 
-
-
-/**
- * @brief Sets a static IP address for the WiFi connection.
- * 
- * @param ip The static IP address to set (in string format).
- * @param netmask The netmask for the static IP address (in string format).
- * @param gateway The gateway for the static IP address (in string format).
- * 
- * @return int Returns 0 on success, or a negative error code on failure.
- * 
- */
-int set_wifi_static_ip(const char *ip, const char *netmask, const char *gateway);
 
 /**
  * @brief Gets the current IP address of the WiFi connection.

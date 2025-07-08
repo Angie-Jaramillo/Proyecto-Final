@@ -96,6 +96,8 @@
         "streambuf": "c",
         "cinttypes": "c",
         "typeinfo": "c",
-        "platform.h": "c"
-    }
+        "platform.h": "c",
+        "stdlib.h": "c"
+    },
+    "idf.pythonInstallPath": "/usr/bin/python"
 }
