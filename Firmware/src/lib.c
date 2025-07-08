@@ -41,9 +41,6 @@ void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p,
     {
         start_test(); 
         struct pbuf *response = pbuf_alloc(PBUF_TRANSPORT, 20, PBUF_RAM);
-/*      strcpy((char *)response->payload, "Received: on");
-        udp_sendto(pcb, response, addr, port);
-        pbuf_free(response); */
     }
     else if (strcmp(buffer, "off") == 0)
     {
@@ -58,21 +55,8 @@ void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p,
         udp_sendto(pcb, response, addr, port);
         pbuf_free(response);
         
-/*         struct pbuf *response = pbuf_alloc(PBUF_TRANSPORT, 20, PBUF_RAM);
-        strcpy((char *)response->payload, "Received: off");
-        udp_sendto(pcb, response, addr, port);
-        pbuf_free(response); */
     }
-/*     else if (strcmp(buffer, "consulta") == 0)
-    {
-        calculate_results();
 
-        const char *estado = gpio_get(LED_PIN) ? "Now LED is HIGH" : "Now LED is LOW";
-        struct pbuf *response = pbuf_alloc(PBUF_TRANSPORT, strlen(estado), PBUF_RAM);
-        strcpy((char *)response->payload, estado);
-        udp_sendto(pcb, response, addr, port);
-        pbuf_free(response);
-    } */
 
     pbuf_free(p); // liberar paquete recibido
 }
