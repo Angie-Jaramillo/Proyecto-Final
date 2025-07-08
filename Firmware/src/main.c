@@ -12,11 +12,9 @@ int main() {
 
     sleep_ms(3000); // Allow time for the system to stabilize
 
-    if (wifi_connect(udp_receive_callback) != 0) {
-        printf("Failed to connect to WiFi.\n");
-        return -1; // Exit if connection fails
-    }
-   
+    wifi_connect(udp_receive_callback);
+
+    printf("¡Esperando el boton!\n");
     printf("¡Comenzando Test de Léger!\n");
     
     while (true) {
