@@ -15,7 +15,6 @@
 #define GATEWAY "192.168.1.254"
 
 
-
 int main() {
 
     stdio_init_all();
@@ -24,11 +23,12 @@ int main() {
 
 
     wifi_init();
-    if (wifi_connect(WIFI_SSID, WIFI_PASSWORD) != 0) {
+    if (wifi_connect(WIFI_SSID, WIFI_PASSWORD, udp_receive_callback) != 0) {
         printf("Failed to connect to WiFi.\n");
         return -1; // Exit if connection fails
     }
     printf("Connected to WiFi SSID: %s\n", WIFI_SSID);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
     wifi_get_ip(); // Print the IP address after connection
 
@@ -37,18 +37,14 @@ int main() {
         printf("Failed to set static IP address.\n");
         return -1; // Exit if setting static IP fails
     }
+
    
-    
-
     printf("¡Comenzando Test de Léger!\n");
-
     
-
-    start_test(); // Start the Léger test
 
     while (true) {
-        __wfi();
-
+        cyw43_arch_poll(); // necesario para que funcione lwIP
+        sleep_ms(10);
         // Aqui deberias comparar las banderas para saber que boton se presionó
 
     }

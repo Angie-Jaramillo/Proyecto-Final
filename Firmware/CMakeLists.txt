@@ -28,7 +28,7 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(wifi_example C CXX ASM)
+project(main C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
@@ -36,29 +36,29 @@ pico_sdk_init()
 include_directories(include)
 
 # Add executable. Default name is the project name, version 0.1
-add_executable(wifi_example 
-            src/wifi_example.c
+add_executable(main 
+            src/main.c
             src/lib.c
             src/leds.c
             src/wifi_hal.c)
 
-pico_set_program_name(wifi_example "wifi_example")
-pico_set_program_version(wifi_example "0.1")
+pico_set_program_name(main "main")
+pico_set_program_version(main "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(wifi_example 0)
-pico_enable_stdio_usb(wifi_example 1)
+pico_enable_stdio_uart(main 0)
+pico_enable_stdio_usb(main 1)
 
 # Add the standard library to the build
-target_link_libraries(wifi_example
+target_link_libraries(main
         pico_stdlib
         pico_cyw43_arch_lwip_threadsafe_background)
 
 # Add the standard include files to the build
-target_include_directories(wifi_example PRIVATE
+target_include_directories(main PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
 
-pico_add_extra_outputs(wifi_example)
+pico_add_extra_outputs(main)
 

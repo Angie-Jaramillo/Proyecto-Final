@@ -23,7 +23,8 @@ int wifi_init(void) {
     return 0;                       // Success
 }
 
-int wifi_connect(const char *ssid, const char *password) {
+
+int wifi_connect(const char *ssid, const char *password, udp_recv_fn udp_callback) {
    
     if (ssid == NULL || password == NULL) {
         printf("SSID or password is NULL.\n");
@@ -42,6 +43,24 @@ int wifi_connect(const char *ssid, const char *password) {
     }
 
     printf("Connected to WiFi SSID: %s\n", ssid);
+
+    printf("Configurando servidor UDP...\n");
+
+    struct udp_pcb *pcb = udp_new_ip_type(IPADDR_TYPE_ANY);
+    if (!pcb) {
+        printf("Error creating UDP PCB\n");
+        return -1;                 // Return error code for PCB creation failure
+    }
+
+    if (udp_bind(pcb, IP_ANY_TYPE, UDP_PORT) != ERR_OK) {
+        printf("Error binding UDP PCB\n");
+        return -1;                 // Return error code for bind failure
+    }
+
+    udp_recv(pcb, udp_callback, NULL); // Set the receive callback
+    printf("UDP server ready on port %d\n", UDP_PORT);
+
+    // Set the default network interface
     cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
 } 
@@ -52,14 +71,6 @@ void wifi_get_ip(void) {
 
 }
 
-/**
- * Configura una dirección IP estática para la conexión WiFi
- * 
- * @param ip La dirección IP estática a asignar (ej. "192.168.1.100")
- * @param netmask La máscara de red (ej. "255.255.255.0")
- * @param gateway La puerta de enlace (ej. "192.168.1.1")
- * @return 0 si éxito, -1 si error en formato de IP, -2 si interfaz no disponible
- */
 int set_wifi_static_ip(const char *ip, const char *netmask, const char *gateway) {
     // Verificar que la interfaz de red esté disponible
     if (netif_default == NULL) {
@@ -81,14 +92,14 @@ int set_wifi_static_ip(const char *ip, const char *netmask, const char *gateway)
     }
 
     // Configurar la dirección IP estática
-    netif_set_addr(netif_default, &ip_addr, &mask_addr, &gw_addr);
-    sleep_ms(100); // Esperar a que se apliquen los cambios
+/*     netif_set_addr(netif_default, &ip_addr, &mask_addr, &gw_addr);
+    sleep_ms(100); // Esperar a que se apliquen los cambios */
 
     // Verificar y mostrar la configuración aplicada
-    printf("\nConfiguración IP estática aplicada:\n");
+/*     printf("\nConfiguración IP estática aplicada:\n");
     printf("IP Address: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
     printf("Netmask: %s\n", ip4addr_ntoa(netif_ip4_netmask(netif_default)));
-    printf("Gateway: %s\n", ip4addr_ntoa(netif_ip4_gw(netif_default)));
+    printf("Gateway: %s\n", ip4addr_ntoa(netif_ip4_gw(netif_default))); */
     
     return 0; // Éxito
 }

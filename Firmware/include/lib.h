@@ -14,6 +14,7 @@
 #include "pico/platform.h"
 #include "pico/sync.h"
 
+
 #include "leds.h"
 
 #ifndef LIB_H
@@ -49,6 +50,14 @@ extern test_state_t test_state;  // Declaración del estado del test
  */
 void update_interval_for_level(int level);
 
+
+/**
+ * @brief Callback para recibir mensajes UDP.
+ * 
+ * Este callback se llama cuando se recibe un mensaje UDP.
+ */
+void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_addr_t *addr, u16_t port);
+
 /**
  * @brief Callback para el temporizador de pitido.
  * 
@@ -71,12 +80,6 @@ int64_t level_up_callback(alarm_id_t id, void *user_data);
  */
 void start_test();
 
-/**
- * @brief Calcula los resultados del test de Léger.
- * 
- * Esta función calcula y muestra los resultados finales del test.
- */
-void calculate_results();
 
 /**
  * @brief Detiene el test de Léger.
@@ -85,17 +88,11 @@ void calculate_results();
  */
 void stop_test();
 
-/**
+/* /**
  * @brief Resetea el test de Léger.
  * 
  * Esta función resetea el test a su configuración inicial.
  */
-void reset_test();
-
-
-
-
-
-
+/* void reset_test(); */
 
 #endif // LIB_H

@@ -15,8 +15,14 @@
 
 
 #include "pico/cyw43_arch.h"
+#include "lwip/pbuf.h"
+#include "lwip/udp.h"
+#include <string.h>
+#include <stdio.h>
+#include "lwip/netif.h"
 
 
+#define UDP_PORT 1234                   // UDP Port for communication
 #define WIFI_SSID "ANGIE"               // Wifi SSID 
 #define WIFI_PASSWORD "1001804091"      // Wifi Password
 
@@ -41,7 +47,7 @@ int wifi_init(void);
  * @return int Returns 0 on success, or a negative error code on failure.
  * 
  */
-int wifi_connect(const char *ssid, const char *password); 
+int wifi_connect(const char *ssid, const char *password, udp_recv_fn udp_callback); 
 
 
 

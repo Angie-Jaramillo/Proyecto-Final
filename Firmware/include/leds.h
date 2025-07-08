@@ -6,8 +6,8 @@
 #include "hardware/gpio.h"
 
 // Define GPIO pins for LEDs
-#define LED_GREEN_PIN 16    // Pin for green LED
-#define LED_RED_PIN 17      // Pin for red LED
+#define LED_GREEN_PIN 2    // Pin for green LED
+#define LED_RED_PIN 3      // Pin for red LED
 
 
 /**
