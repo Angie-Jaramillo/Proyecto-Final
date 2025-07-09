@@ -56,8 +56,6 @@ void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const 
         pbuf_free(response);
         
     }
-
-
     pbuf_free(p); // liberar paquete recibido
 }
 
