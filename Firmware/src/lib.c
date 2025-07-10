@@ -27,9 +27,10 @@ void update_interval_for_level(int level)
 
 void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_addr_t *addr, u16_t port)
 {
-    if (!p)
+    if (!p){
+        printf("Error: paquete UDP nulo recibido\n");
         return;
-        
+    }
     char buffer[256] = {0};
     memcpy(buffer, p->payload, p->len);
     buffer[p->len] = '\0';

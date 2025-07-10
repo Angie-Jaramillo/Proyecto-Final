@@ -22,11 +22,13 @@
 #include <string.h>
 #include <stdio.h>
 
-#define IS_AP 1         // <--- Cambia a 0 para que esta Pico sea cliente STA
+#define RP 1         // <--- 0 para usar la raspberry 1, 1 para usar la raspberry 2
 
-#define SSID "Raspberry Pi Pico W"
-#define PASSWORD "12345678"
+#define SSID "Raspberry"
+#define PASSWORD "1001804091"
 #define UDP_PORT 1234
+
+
 
 
 /**
@@ -38,7 +40,7 @@
  * @return int Returns 0 on success, or a negative error code on failure.
  * 
  */
-int wifi_connect(udp_recv_fn udp_callback); 
+int dev_wifi_connect (udp_recv_fn udp_callback);
 
 
 /**

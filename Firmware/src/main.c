@@ -12,7 +12,7 @@ int main() {
 
     sleep_ms(3000); // Allow time for the system to stabilize
 
-    wifi_connect(udp_receive_callback);
+    dev_wifi_connect(udp_receive_callback);
 
     printf("¡Esperando el boton!\n");
     printf("¡Comenzando Test de Léger!\n");

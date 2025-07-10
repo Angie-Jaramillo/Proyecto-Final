@@ -22,19 +22,19 @@ void static inline setup_udp_listener(udp_recv_fn udp_receive_callback) {
     printf("UDP listener activo en el puerto %d\n", UDP_PORT);
 }
 
-void static inline set_static_ip(int is_ap)
+void static inline set_static_ip(int rp)
 {
     ip4_addr_t ipaddr, netmask, gw;
 
-    if (is_ap)
+    if (rp)
     {
-        IP4_ADDR(&ipaddr, 192, 168, 4, 1);
-        IP4_ADDR(&gw, 192, 168, 4, 1);
+        IP4_ADDR(&ipaddr, 10, 42, 0, 2);
+        IP4_ADDR(&gw, 10, 42, 0, 1);
     }
     else
     {
-        IP4_ADDR(&ipaddr, 192, 168, 4, 2);
-        IP4_ADDR(&gw, 192, 168, 4, 1);
+         IP4_ADDR(&ipaddr, 10, 42, 0, 3);
+        IP4_ADDR(&gw, 10, 42, 0, 1);
     }
 
     IP4_ADDR(&netmask, 255, 255, 255, 0);
@@ -42,48 +42,43 @@ void static inline set_static_ip(int is_ap)
     printf("IP estática configurada: %s\n", ip4addr_ntoa(&ipaddr));
 }
 
-
-int wifi_connect(udp_recv_fn udp_callback)
-{
+int dev_wifi_connect (udp_recv_fn udp_callback) {
+    
     if (cyw43_arch_init())
     {
         return -1;
     }
 
-    printf("WiFi hardware initialized successfully.\n");
-
-#if IS_AP
-    // Este codigo solo se compila y se ejecuta si IS_AP es 1
-    printf("Configurando Wi-Fi en modo AP...\n");
-    cyw43_arch_enable_ap_mode(SSID, PASSWORD, CYW43_AUTH_WPA2_AES_PSK);
-    set_static_ip(1); // Establecer IP fija del AP
-
-    printf("Modo AP activado con SSID: %s\n", SSID);
-    printf("IP del AP: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
-#else
-    // Este codigo solo se compila y se ejecuta si IS_AP es 0
-    printf("Configurando Wi-Fi en modo STA...\n");
-    cyw43_arch_enable_sta_mode();
-    if (cyw43_arch_wifi_connect_timeout_ms(SSID, PASSWORD,
-                                           CYW43_AUTH_WPA2_AES_PSK, 30000))
-    {
-        printf("No se pudo conectar a %s\n", SSID);
+    if (SSID == NULL || PASSWORD == NULL) {
+        printf("SSID o contraseña no configurados.\n");
         return -1;
     }
-    printf("Conectado al AP con IP: %s\n",
-           ip4addr_ntoa(netif_ip4_addr(netif_default)));
 
-    printf("Modo STA activado con SSID: %s\n", SSID);
-    set_static_ip(0); // Establecer IP fija del cliente
+    printf("Conectando a la red Wi-Fi: %s\n", SSID);
+
+    cyw43_arch_enable_sta_mode();
+
+    set_static_ip(RP);
+
+    int ret = cyw43_arch_wifi_connect_timeout_ms(SSID, PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 5000);
+    
+    if (ret) {
+        printf("Error al conectar a la red Wi-Fi: %s\n", SSID);
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+
+        return -1;
+    }
+
+    printf("Conectado a la red Wi-Fi: %s\n", SSID);
     printf("IP del cliente: %s\n", ip4addr_ntoa(netif_ip4_addr(netif_default)));
-#endif
-
-    // Set the default network interface
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
     setup_udp_listener(udp_callback);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
+    return 0;
 }
+
+
 
 void wifi_get_ip(void)
 {
