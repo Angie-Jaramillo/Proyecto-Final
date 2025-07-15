@@ -1,10 +1,11 @@
 /**
  * @file wifi_hal.h
  * 
- * This header file contains the declaration of the WiFi Hardware Abstraction Layer (HAL).
- * It provides functions to initialize the WiFi hardware, connect to a network, and manage the connection state.
+ * Este archivo de cabecera contiene la declaración de la Capa de Abstracción de Hardware (HAL) para WiFi.
+ * Proporciona funciones para inicializar el hardware WiFi, conectarse a una red y gestionar el estado de la conexión.
  * 
- * @author Angie Jaramillo
+ * @authors Angie Jaramillo
+ *          Juan Manuel Rivera
  * @date 21-06-2025
  * 
  * 
@@ -24,9 +25,9 @@
 
 #define RP 1         // <--- 0 para usar la raspberry 1, 1 para usar la raspberry 2
 
-#define SSID "Raspberry"
-#define PASSWORD "1001804091"
-#define UDP_PORT 1234
+#define SSID "Raspberry"                // Nombre de la red Wi-Fi
+#define PASSWORD "1001804091"           // Contraseña de la red Wi-Fi
+#define UDP_PORT 1234                   // Puerto UDP para la comunicación
 
 
 

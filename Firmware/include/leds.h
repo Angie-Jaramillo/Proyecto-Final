@@ -1,3 +1,18 @@
+/**
+ * @file leds.h
+ * 
+ * Este archivo de encabezado contiene la declaración de funciones para controlar los LEDs.
+ * Proporciona funciones para inicializar los LEDs, alternar su estado y apagarlos.
+ * 
+ * @authors Angie Jaramillo
+ *          Juan Manuel Rivera
+ * 
+ * @date 21-06-2025
+ * 
+ */
+
+
+
 #ifndef _LEDS_H
 #define _LEDS_H
 

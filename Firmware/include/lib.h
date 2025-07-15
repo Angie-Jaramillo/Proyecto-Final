@@ -55,6 +55,15 @@ void update_interval_for_level(int level);
  * @brief Callback para recibir mensajes UDP.
  * 
  * Este callback se llama cuando se recibe un mensaje UDP.
+ * 
+ * @param arg Argumento adicional (no utilizado).
+ * @param pcb El PCB UDP asociado a la conexión.
+ * @param p El paquete recibido.
+ * @param addr Dirección IP del remitente.
+ * @param port Puerto del remitente.
+ * 
+ * @note Este callback maneja los comandos "on" y "off" para iniciar y detener el test de Léger.
+ * 
  */
 void udp_receive_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_addr_t *addr, u16_t port);
 
@@ -88,11 +97,5 @@ void start_test();
  */
 void stop_test();
 
-/* /**
- * @brief Resetea el test de Léger.
- * 
- * Esta función resetea el test a su configuración inicial.
- */
-/* void reset_test(); */
 
 #endif // LIB_H

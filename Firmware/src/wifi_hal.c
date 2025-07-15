@@ -1,10 +1,11 @@
 /**
  * @file wifi_hal.h
  *
- * This header file contains the declaration of the `wifi_hal` function.
- * It is designed to provide a simple interface for WiFi operations
+ * Este archivo de encabezado contiene la declaración de las funciones de `wifi_hal`.
+ * Está diseñado para proporcionar una interfaz simple para operaciones WiFi
  *
- * @author Angie Jaramillo
+ * @authors Angie Jaramillo
+ *         Juan Manuel Rivera
  * @date 21-06-2025
  */
 

@@ -1,3 +1,17 @@
+/**
+ * @file leds.c
+ * 
+ * Este archivo contiene las funciones para controlar los LEDs.
+ * Proporciona funciones para inicializar los LEDs, alternar su estado y apagarlos.
+ * 
+ * @author Angie Jaramillo
+ *        Juan Manuel Rivera
+ * 
+ * @date 21-06-2025
+ * 
+ */
+
+
 #include "leds.h"
 
 

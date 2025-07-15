@@ -1,22 +1,29 @@
 /**
- * @brief Actualiza el intervalo de pitido basado en el nivel actual.
- *
- * @param level El nivel actual del test.
- *
- *
+ * @file lib.c
+ * 
+ * Este archivo contiene las funciones relacionadas con el test de Léger.
+ * * Incluye la inicialización de LEDs, el manejo de temporizadores para pitidos y cambios de nivel,
+ * * y la lógica para iniciar y detener el test.
+ * 
+ * @authors Angie Jaramillo
+ *          Juan Manuel Rivera
+ * 
+ * @date 21-06-2025
+ * 
+ * 
  */
+
 
 #include "lib.h"
 
-test_state_t test_state = {1, 8.5, 8470}; // Estado inicial del test
-alarm_id_t alarm_id = 0;
-alarm_id_t level_up_id = 0;
+test_state_t test_state = {1, 8.5, 8470};       // Estado inicial del test
+alarm_id_t alarm_id = 0;                        // ID del temporizador para pitidos
+alarm_id_t level_up_id = 0;                     // ID del temporizador para cambio de nivel
 
 void update_interval_for_level(int level)
 {
-
+    
     test_state.speed_kmh = 8.5 + 0.5 * (level - 1);
-
     float speed_ms = test_state.speed_kmh * (1000.0 / 3600.0);
 
     // Calcula el intervalo en milisegundos basado en la distancia y la velocidad
