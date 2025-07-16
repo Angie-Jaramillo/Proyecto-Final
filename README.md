@@ -91,3 +91,17 @@ Electrónica variada (resistencias, cables, pines macho/hembra, headers)
 - Usa una app móvil o software de red (como Python o Netcat) para enviar comandos UDP a la IP y puerto correspondiente (53).
 - Observa el cambio en las luces LED indicando el ritmo del test.
 - Detén el test con el comando "off" y recibe el nivel alcanzado.
+
+## Organización del trabajo del equipo
+Angie Paola Jaramillo:
+- Responsable del desarrollo del Software.
+- Firmware del RP2040.
+- Manejo del Hotspot.
+- Apoyo en el Hardware.
+- Pruebas del prototipo.
+
+Juan Manuel Rivera:
+- Responsable del diseño del Hardware.
+- Ensamblaje del prototipo.
+- Diseño y desarrollo de la app LegerBot.
+- Pruebas del prototipo.
