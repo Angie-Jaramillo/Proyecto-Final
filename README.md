@@ -17,6 +17,7 @@ El sistema está compuesto por dos unidades basadas en la Raspberry Pi Pico W, q
 
 ### Diagrama de hardware
 
+<img width="795" height="676" alt="image" src="https://github.com/user-attachments/assets/122dbc33-cdc3-474d-82e0-3e884ea7d97c" />
 
 
 Conexión Wi-Fi: Cada Pico se conecta a una red Wi-Fi y se le asigna una IP estática.
@@ -55,14 +56,14 @@ Electrónica variada (resistencias, cables, pines macho/hembra, headers)
 
 | Elemento                  | Cantidad | Precio unitario (COP) | Total (COP)   |
 | ------------------------- | -------- | --------------------- | ------------- |
-| Raspberry Pi Pico W       | 2        | \$60,000              | \$120,000     |
-| Tiras LED bicolor         | 2        | \$8,000               | \$16,000      |
-| Transistores (ej. 2N2222) | 4        | \$1,000               | \$4,000       |
-| Baquelas perforadas       | 2        | \$3,000               | \$6,000       |
-| Baterías LiPo 3.7 V       | 2        | \$25,000              | \$50,000      |
-| Impresión 3D de caja      | 2        | \$15,000              | \$30,000      |
+| Raspberry Pi Pico W       | 2        | \$44,625              | \$89,250      |
+| Tiras LED bicolor         | 1        | \$45,000              | \$45,000      |
+| Transistores (2N2222)     | 4        | \$100                 | \$400         |
+| Baquelas perforadas       | 2        | \$1,300               | \$2,600       |
+| Baterías LiPo 3S          | 2        | \$138,000             | \$276,000     |
+| Caja plástica 15x9x5cm    | 2        | \$8,925               | \$17,850      |
 | Electrónica variada       | 1 lote   | \$10,000              | \$10,000      |
-| **Total estimado**        | —        |                       | **\$236,000** |
+| **Total estimado**        | —        | —                     | **\$441,100** |
 
 > Nota: Los valores son aproximados y pueden variar según el proveedor.
 
