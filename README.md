@@ -42,6 +42,23 @@ Comando	Acción
 - "on"	Inicia el test, reinicia nivel, velocidad y temporizadores.
 - "off"	Detiene el test y responde con el último nivel alcanzado.
 
+## Estructura del Hardware
+
+El sistema está compuesto por los siguientes módulos:
+1. Batería LiPo de 12V.
+   - Es la fuente principal de alimentación del sistema. Suministra energía tanto al RP2040 (vía regulador) como directamente a la matriz de LEDs. Incluye un indicador de carga que permite monitorear el estado de la batería.
+2. Regulador de Voltaje MP1584 (12V → 5V)
+   - Reduce el voltaje de la batería de 12 V a 5 V, adecuado para alimentar el microcontrolador RP2040.
+3. Microcontrolador RP2040
+   - Es el núcleo de control del sistema. Alimentado con 5 V provenientes del regulador, esta conectado vía Wi-Fi al Hotspot creado por el celular o computador.
+   - Usa pines GPIO para controlar el encendido/apagado de un LED de estado, y envia señales al controlador de color de los LEDs, el cual gestiona el cambio entre color rojo y verde.
+4. Matriz de LEDs
+   - Alimentada directamente desde la batería de 12V.
+   - Su color es gestionado mediante un módulo externo que recibe señales desde el RP2040.
+   - Sirve como señal visual para el usuario del test (verde: avanzar, rojo: detenerse).
+5. Hotspot
+   - Punto de acceso Wi-Fi al cual se conecta el RP2040, toda la comunicación entre el celular y el microcontrolador ocurre a través de esta red local.
+
 ## Requisitos de Hardware
 2 × Raspberry Pi Pico W
 2 × Tiras LED (2 colores: rojo y verde)
@@ -62,8 +79,9 @@ Electrónica variada (resistencias, cables, pines macho/hembra, headers)
 | Baquelas perforadas       | 2        | \$1,300               | \$2,600       |
 | Baterías LiPo 3S          | 2        | \$138,000             | \$276,000     |
 | Caja plástica 15x9x5cm    | 2        | \$8,925               | \$17,850      |
+| Tripode                   | 2        | \$47,000              | \$94,000      |
 | Electrónica variada       | 1 lote   | \$10,000              | \$10,000      |
-| **Total estimado**        | —        | —                     | **\$441,100** |
+| **Total estimado**        | —        | —                     | **\$535,100** |
 
 > Nota: Los valores son aproximados y pueden variar según el proveedor.
 
