@@ -1,1 +1,65 @@
-# Proyecto-Final
+# Test de Léger Automatizado con Raspberry Pi Pico W
+Este proyecto implementa un sistema embebido que automatiza el Test de Léger (también conocido como Beep Test) mediante dos microcontroladores Raspberry Pi Pico W, control de luces LED, comunicación por Wi-Fi usando el protocolo UDP y una interfaz móvil para iniciar o detener el test.
+
+## Descripción General
+El sistema está compuesto por dos unidades basadas en la Raspberry Pi Pico W, que actúan como receptores de comandos ("on" / "off") enviados por una app móvil o PC. Cada unidad genera señales luminosas sincronizadas con los pitidos característicos del test y ajusta el ritmo cada 60 segundos conforme a los niveles del test de Léger.
+
+## Arquitectura del Sistema
+<img src="./ad450836-a379-487a-9271-5a49bc762980.png" alt="Diagrama de flujo" width="800"/>
+Conexión Wi-Fi: Cada Pico se conecta a una red Wi-Fi y se le asigna una IP estática.
+
+- **Servidor UDP:** Se implementa un listener UDP que reacciona a los mensajes "on" (inicia test) y "off" (detiene test).
+
+- **Control del Test:** Un sistema de temporizadores ajusta la velocidad de pitidos cada 60 segundos, y alterna LEDs para indicar el ritmo.
+
+- **Lógica de control:** Cuando se detiene el test, se devuelve al cliente el último nivel alcanzado.
+
+## Estructura del Código
+´main.c´
+Inicializa la Raspberry Pi Pico W, configura la conexión Wi-Fi y entra en el bucle principal donde se mantienen los servicios de red.
+
+´lib.c / lib.h´
+Contiene la lógica del test de Léger: control de nivel, velocidad, pitidos y respuesta a comandos UDP.
+
+´leds.c / leds.h´
+Controla el encendido, alternancia y apagado de LEDs (representación visual del ritmo del test).
+
+´wifi_hal.c / wifi_hal.h´
+Se encarga de la conexión a Wi-Fi, configuración de IP estática y del listener UDP.
+
+## Comandos UDP disponibles
+Comando	Acción
+- "on"	Inicia el test, reinicia nivel, velocidad y temporizadores.
+- "off"	Detiene el test y responde con el último nivel alcanzado.
+
+## Requisitos de Hardware
+2 × Raspberry Pi Pico W
+2 × Tiras LED (2 colores: rojo y verde)
+4 × Transistores (para controlar LEDs)
+2 × Baterías LiPo recargables
+2 × Baquelas perforadas
+2 × Cajas impresas en 3D
+
+Electrónica variada (resistencias, cables, pines macho/hembra, headers)
+
+## Presupuesto Estimado
+
+| Elemento                  | Cantidad | Precio unitario (COP) | Total (COP)   |
+| ------------------------- | -------- | --------------------- | ------------- |
+| Raspberry Pi Pico W       | 2        | \$60,000              | \$120,000     |
+| Tiras LED bicolor         | 2        | \$8,000               | \$16,000      |
+| Transistores (ej. 2N2222) | 4        | \$1,000               | \$4,000       |
+| Baquelas perforadas       | 2        | \$3,000               | \$6,000       |
+| Baterías LiPo 3.7 V       | 2        | \$25,000              | \$50,000      |
+| Impresión 3D de caja      | 2        | \$15,000              | \$30,000      |
+| Electrónica variada       | 1 lote   | \$10,000              | \$10,000      |
+| **Total estimado**        | —        |                       | **\$236,000** |
+
+> Nota: Los valores son aproximados y pueden variar según el proveedor.
+
+## Instrucciones de uso
+- Asegúrate de que ambas Raspberry Pi Pico W estén configuradas con la IP estática correcta.
+- Conecta ambas a la misma red Wi-Fi (ej. hotspot del celular o router local).
+- Usa una app móvil o software de red (como Python o Netcat) para enviar comandos UDP a la IP y puerto correspondiente (53).
+- Observa el cambio en las luces LED indicando el ritmo del test.
+- Detén el test con el comando "off" y recibe el nivel alcanzado.
