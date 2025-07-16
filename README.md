@@ -17,7 +17,7 @@ El sistema está compuesto por dos unidades basadas en la Raspberry Pi Pico W, q
 
 ### Diagrama de hardware
 
-<img width="795" height="676" alt="image" src="https://github.com/user-attachments/assets/122dbc33-cdc3-474d-82e0-3e884ea7d97c" />
+<img width="395" height="395" alt="image" src="https://github.com/user-attachments/assets/122dbc33-cdc3-474d-82e0-3e884ea7d97c" />
 
 
 Conexión Wi-Fi: Cada Pico se conecta a una red Wi-Fi y se le asigna una IP estática.
