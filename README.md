@@ -5,7 +5,20 @@ Este proyecto implementa un sistema embebido que automatiza el Test de Léger (t
 El sistema está compuesto por dos unidades basadas en la Raspberry Pi Pico W, que actúan como receptores de comandos ("on" / "off") enviados por una app móvil o PC. Cada unidad genera señales luminosas sincronizadas con los pitidos característicos del test y ajusta el ritmo cada 60 segundos conforme a los niveles del test de Léger.
 
 ## Arquitectura del Sistema
-<img src="./ad450836-a379-487a-9271-5a49bc762980.png" alt="Diagrama de flujo" width="800"/>
+
+### Flujo principal del sistema
+<img width="395" height="395" alt="image" src="https://github.com/user-attachments/assets/d0118c2d-684f-48c5-9256-ac4c05e3a7e8" />
+
+### Configuración del servidor UDP
+<img width="395" height="395" alt="image" src="https://github.com/user-attachments/assets/f3a1701b-ee97-40e4-8a99-7e56cae9d170" />
+
+### Alarmas
+<img width="395" height="395" alt="image" src="https://github.com/user-attachments/assets/03d42fe6-34f2-4fba-a984-d68a52b12e48" />
+
+### Diagrama de hardware
+
+
+
 Conexión Wi-Fi: Cada Pico se conecta a una red Wi-Fi y se le asigna una IP estática.
 
 - **Servidor UDP:** Se implementa un listener UDP que reacciona a los mensajes "on" (inicia test) y "off" (detiene test).
@@ -15,17 +28,13 @@ Conexión Wi-Fi: Cada Pico se conecta a una red Wi-Fi y se le asigna una IP est�
 - **Lógica de control:** Cuando se detiene el test, se devuelve al cliente el último nivel alcanzado.
 
 ## Estructura del Código
-´main.c´
-Inicializa la Raspberry Pi Pico W, configura la conexión Wi-Fi y entra en el bucle principal donde se mantienen los servicios de red.
+- `main.c`: Inicializa la Raspberry Pi Pico W, configura la conexión Wi-Fi y entra en el bucle principal donde se mantienen los servicios de red.
 
-´lib.c / lib.h´
-Contiene la lógica del test de Léger: control de nivel, velocidad, pitidos y respuesta a comandos UDP.
+- `lib.c / lib.h`: Contiene la lógica del test de Léger: control de nivel, velocidad, pitidos y respuesta a comandos UDP.
 
-´leds.c / leds.h´
-Controla el encendido, alternancia y apagado de LEDs (representación visual del ritmo del test).
+- `leds.c / leds.h`: Controla el encendido, alternancia y apagado de LEDs (representación visual del ritmo del test).
 
-´wifi_hal.c / wifi_hal.h´
-Se encarga de la conexión a Wi-Fi, configuración de IP estática y del listener UDP.
+- `wifi_hal.c / wifi_hal.h`: Se encarga de la conexión a Wi-Fi, configuración de IP estática y del listener UDP.
 
 ## Comandos UDP disponibles
 Comando	Acción
